@@ -38,7 +38,7 @@
 #include <cpuid.h>
 #endif  // HWY_COMPILER_MSVC
 
-#elif HWY_ARCH_ARM && HWY_OS_LINUX
+#elif (HWY_ARCH_RVV | HWY_ARCH_ARM) && HWY_OS_LINUX
 #include <asm/hwcap.h>
 #include <sys/auxv.h>
 #endif  // HWY_ARCH_*
@@ -286,6 +286,15 @@ uint32_t DetectTargets() {
     fprintf(stderr, "WARNING: CPU supports %zx but software requires %x\n",
             size_t(bits), HWY_ENABLED_BASELINE);
   }
+
+#elif HWY_ARCH_RVV && HWY_HAVE_RUNTIME_DISPATCH
+  // uncomment the following line if you know what you are doing:
+  // bits |= HWY_RVV;
+  using CapBits = unsigned long;  // NOLINT
+  const CapBits hw = getauxval(AT_HWCAP);
+  const CapBits hw2 = getauxval(AT_HWCAP2);
+  fprintf(stderr, "DEBUG: getauxval returned %zx\n", size_t(hw) );
+  fprintf(stderr, "DEBUG: getauxval2 returned %zx\n", size_t(hw2) );
 
 #elif HWY_ARCH_ARM && HWY_HAVE_RUNTIME_DISPATCH
   using CapBits = unsigned long;  // NOLINT

@@ -364,7 +364,7 @@
 
 // x86 compilers generally allow runtime dispatch. On Arm, currently only GCC
 // does, and we require Linux to detect CPU capabilities.
-#if HWY_ARCH_X86 || (HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX)
+#if HWY_ARCH_X86 || (HWY_ARCH_ARM && HWY_COMPILER_GCC_ACTUAL && HWY_OS_LINUX) || (HWY_ARCH_RVV && HWY_COMPILER_CLANG && HWY_OS_LINUX)
 #define HWY_HAVE_RUNTIME_DISPATCH 1
 #else
 #define HWY_HAVE_RUNTIME_DISPATCH 0
@@ -402,6 +402,10 @@
 #elif HWY_ARCH_ARM && HWY_HAVE_RUNTIME_DISPATCH
 #define HWY_ATTAINABLE_TARGETS                                      \
   HWY_ENABLED(HWY_BASELINE_SCALAR | HWY_NEON | HWY_ATTAINABLE_SVE | \
+              HWY_ATTAINABLE_SVE2)
+#elif HWY_ARCH_RVV && HWY_HAVE_RUNTIME_DISPATCH
+#define HWY_ATTAINABLE_TARGETS                                      \
+  HWY_ENABLED(HWY_BASELINE_SCALAR | HWY_RVV | HWY_ATTAINABLE_SVE | \
               HWY_ATTAINABLE_SVE2)
 #else
 #define HWY_ATTAINABLE_TARGETS \

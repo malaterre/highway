@@ -231,6 +231,8 @@
 #if HWY_HAVE_RUNTIME_DISPATCH
 #if HWY_ARCH_ARM_V7
 #define HWY_TARGET_STR "+neon-vfpv4"
+#elif HWY_ARCH_RVV
+#define HWY_TARGET_STR "+foobar"
 #else
 #define HWY_TARGET_STR "+crypto"
 #endif  // HWY_ARCH_ARM_V7
@@ -277,6 +279,8 @@
 #if HWY_HAVE_RUNTIME_DISPATCH
 #if HWY_TARGET == HWY_SVE2 || HWY_TARGET == HWY_SVE2_128
 #define HWY_TARGET_STR "+sve2-aes"
+#elif HWY_TARGET == HWY_RVV
+#define HWY_TARGET_STR "+mathieu"
 #else
 #define HWY_TARGET_STR "+sve"
 #endif
