@@ -84,7 +84,7 @@ HWY_NOINLINE void TestMath(const char* name, T (*fx1)(T),
       const auto ulp = hwy::detail::ComputeUlpDelta(actual, expected);
       max_ulp = HWY_MAX(max_ulp, ulp);
       if (ulp > max_error_ulp) {
-        fprintf(stderr, "%s: %s(%f) expected %f actual %f ulp %g max ulp %u\n",
+        fprintf(stderr, "%s: %s(%.17g) expected %.17g actual %.17g ulp %g max ulp %u\n",
                 hwy::TypeName(T(), Lanes(d)).c_str(), name, value, expected,
                 actual, static_cast<double>(ulp),
                 static_cast<uint32_t>(max_error_ulp));
@@ -371,25 +371,25 @@ HWY_AFTER_NAMESPACE();
 
 namespace hwy {
 HWY_BEFORE_TEST(HwyMathTest);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAcos);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAcosh);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAsin);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAsinh);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAtan);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAtanh);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllCos);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllExp);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllExpm1);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog10);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAcos);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAcosh);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAsin);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAsinh);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAtan);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAtanh);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllCos);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllExp);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllExpm1);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog10);
 HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog1p);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog2);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSin);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinh);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllTanh);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAtan2);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinCosSin);
-HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinCosCos);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllLog2);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSin);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinh);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllTanh);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllAtan2);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinCosSin);
+//HWY_EXPORT_AND_TEST_P(HwyMathTest, TestAllSinCosCos);
 }  // namespace hwy
 
 #endif

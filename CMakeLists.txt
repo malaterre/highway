@@ -90,7 +90,7 @@ check_cxx_source_compiles(
 if (HWY_ENABLE_CONTRIB)
 # Glob all the traits so we don't need to modify this file when adding
 # additional special cases.
-file(GLOB HWY_CONTRIB_SOURCES "hwy/contrib/sort/vqsort_*.cc")
+#file(GLOB HWY_CONTRIB_SOURCES "hwy/contrib/sort/vqsort_*.cc")
 list(APPEND HWY_CONTRIB_SOURCES
     hwy/contrib/dot/dot-inl.h
     hwy/contrib/image/image.cc
@@ -446,12 +446,14 @@ if (HWY_ENABLE_EXAMPLES)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 # Programming exercise with integrated benchmark
+add_executable(log1p hwy/examples/log1p.cc)
 add_executable(hwy_benchmark hwy/examples/benchmark.cc)
 target_sources(hwy_benchmark PRIVATE
     hwy/nanobenchmark.h)
 # Try adding one of -DHWY_COMPILE_ONLY_SCALAR, -DHWY_COMPILE_ONLY_EMU128 or
 # -DHWY_COMPILE_ONLY_STATIC to observe the difference in targets printed.
 target_compile_options(hwy_benchmark PRIVATE ${HWY_FLAGS})
+target_link_libraries(log1p PRIVATE hwy)
 target_link_libraries(hwy_benchmark PRIVATE hwy)
 target_link_libraries(hwy_benchmark PRIVATE ${ATOMICS_LIBRARIES})
 set_target_properties(hwy_benchmark
