@@ -548,7 +548,8 @@ class CompareResults {
     using Order = typename Traits::Order;
     const Traits st;
     const size_t num_keys = copy_.size() / st.LanesPerKey();
-    Run<Order>(reference, reinterpret_cast<KeyType*>(copy_.data()), num_keys,
+    KeyType *alanes = reinterpret_cast<KeyType*>(__builtin_assume_aligned (copy_.data(), alignof(KeyType)));
+    Run<Order>(reference, alanes, num_keys,
                shared, /*thread=*/0);
 #if VQSORT_PRINT >= 3
     fprintf(stderr, "\nExpected:\n");
@@ -645,7 +646,8 @@ void TestSort(size_t num_lanes) {
             GenerateInput(dist, lanes, num_lanes);
 
         CompareResults<Traits> compare(lanes, num_lanes);
-        Run<Order>(algo, reinterpret_cast<KeyType*>(lanes), num_keys, shared,
+	KeyType *alanes = reinterpret_cast<KeyType*>(__builtin_assume_aligned (lanes, alignof(KeyType)));
+        Run<Order>(algo, alanes, num_keys, shared,
                    /*thread=*/0);
         HWY_ASSERT(compare.Verify(lanes));
         HWY_ASSERT(VerifySort(st, input_stats, lanes, num_lanes, "TestSort"));
