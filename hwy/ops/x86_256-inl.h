@@ -3010,7 +3010,7 @@ HWY_API Mask256<double> IsFinite(Vec256<double> v) {
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API VFromD<D> Load(D /* tag */, const TFromD<D>* HWY_RESTRICT aligned) {
   return VFromD<D>{
-      _mm256_load_si256(reinterpret_cast<const __m256i*>(aligned))};
+      _mm256_load_si256(reinterpret_cast<const __m256i*>((void*)aligned))};
 }
 // bfloat16_t is handled by x86_128-inl.h.
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F16_D(D)>
@@ -3034,7 +3034,7 @@ HWY_API Vec256<double> Load(D /* tag */, const double* HWY_RESTRICT aligned) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API VFromD<D> LoadU(D /* tag */, const TFromD<D>* HWY_RESTRICT p) {
-  return VFromD<D>{_mm256_loadu_si256(reinterpret_cast<const __m256i*>(p))};
+  return VFromD<D>{_mm256_loadu_si256(reinterpret_cast<const __m256i*>((void*)p))};
 }
 // bfloat16_t is handled by x86_128-inl.h.
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F16_D(D)>
@@ -3208,7 +3208,7 @@ HWY_API Vec256<float> LoadDup128(D /* tag */, const float* HWY_RESTRICT p) {
   return Vec256<float>{
       _mm256_insertf128_ps(_mm256_castps128_ps256(v128), v128, 1)};
 #else
-  return Vec256<float>{_mm256_broadcast_ps(reinterpret_cast<const __m128*>(p))};
+  return Vec256<float>{_mm256_broadcast_ps(reinterpret_cast<const __m128*>((void*)p))};
 #endif
 }
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F64_D(D)>
@@ -3220,7 +3220,7 @@ HWY_API Vec256<double> LoadDup128(D /* tag */, const double* HWY_RESTRICT p) {
       _mm256_insertf128_pd(_mm256_castpd128_pd256(v128), v128, 1)};
 #else
   return Vec256<double>{
-      _mm256_broadcast_pd(reinterpret_cast<const __m128d*>(p))};
+      _mm256_broadcast_pd(reinterpret_cast<const __m128d*>((void*)p))};
 #endif
 }
 
@@ -3228,7 +3228,7 @@ HWY_API Vec256<double> LoadDup128(D /* tag */, const double* HWY_RESTRICT p) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API void Store(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT aligned) {
-  _mm256_store_si256(reinterpret_cast<__m256i*>(aligned), v.raw);
+  _mm256_store_si256(reinterpret_cast<__m256i*>((void*)aligned), v.raw);
 }
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F16_D(D)>
 HWY_API void Store(Vec256<float16_t> v, D d, float16_t* HWY_RESTRICT aligned) {
@@ -3252,7 +3252,7 @@ HWY_API void Store(Vec256<double> v, D /* tag */,
 
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API void StoreU(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT p) {
-  _mm256_storeu_si256(reinterpret_cast<__m256i*>(p), v.raw);
+  _mm256_storeu_si256(reinterpret_cast<__m256i*>((void*)p), v.raw);
 }
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F16_D(D)>
 HWY_API void StoreU(Vec256<float16_t> v, D d, float16_t* HWY_RESTRICT p) {
@@ -3383,7 +3383,7 @@ HWY_API void BlendedStore(Vec256<double> v, Mask256<double> m, D d,
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_NOT_FLOAT3264_D(D)>
 HWY_API void Stream(VFromD<D> v, D d, TFromD<D>* HWY_RESTRICT aligned) {
   const RebindToUnsigned<decltype(d)> du;  // for float16_t
-  _mm256_stream_si256(reinterpret_cast<__m256i*>(aligned), BitCast(du, v).raw);
+  _mm256_stream_si256(reinterpret_cast<__m256i*>((void*)aligned), BitCast(du, v).raw);
 }
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F32_D(D)>
 HWY_API void Stream(Vec256<float> v, D /* tag */, float* HWY_RESTRICT aligned) {

@@ -2932,7 +2932,7 @@ HWY_API VFromD<D> LoadDup128(D /* tag */, const double* HWY_RESTRICT p) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 64), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API void Store(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT aligned) {
-  _mm512_store_si512(reinterpret_cast<__m512i*>(aligned), v.raw);
+  _mm512_store_si512(reinterpret_cast<__m512i*>((void*)aligned), v.raw);
 }
 // bfloat16_t is handled by x86_128-inl.h.
 template <class D, HWY_IF_V_SIZE_D(D, 64), HWY_IF_F16_D(D)>
@@ -2955,7 +2955,7 @@ HWY_API void Store(VFromD<D> v, D /* tag */, double* HWY_RESTRICT aligned) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 64), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API void StoreU(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT p) {
-  _mm512_storeu_si512(reinterpret_cast<__m512i*>(p), v.raw);
+  _mm512_storeu_si512(reinterpret_cast<__m512i*>((void*)p), v.raw);
 }
 // bfloat16_t is handled by x86_128-inl.h.
 template <class D, HWY_IF_V_SIZE_D(D, 64), HWY_IF_F16_D(D)>
@@ -3022,7 +3022,7 @@ HWY_API void BlendedStore(Vec512<double> v, Mask512<double> m, D /* tag */,
 template <class D, HWY_IF_V_SIZE_D(D, 64), HWY_IF_NOT_FLOAT3264_D(D)>
 HWY_API void Stream(VFromD<D> v, D d, TFromD<D>* HWY_RESTRICT aligned) {
   const RebindToUnsigned<decltype(d)> du;  // for float16_t
-  _mm512_stream_si512(reinterpret_cast<__m512i*>(aligned), BitCast(du, v).raw);
+  _mm512_stream_si512(reinterpret_cast<__m512i*>((void*)aligned), BitCast(du, v).raw);
 }
 template <class D, HWY_IF_V_SIZE_D(D, 64), HWY_IF_F32_D(D)>
 HWY_API void Stream(VFromD<D> v, D /* tag */, float* HWY_RESTRICT aligned) {

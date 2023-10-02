@@ -1467,7 +1467,7 @@ HWY_API Vec128<int8_t, N> ShiftRight(const Vec128<int8_t, N> v) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API VFromD<D> Load(D /* tag */, const TFromD<D>* HWY_RESTRICT aligned) {
-  return VFromD<D>{_mm_load_si128(reinterpret_cast<const __m128i*>(aligned))};
+  return VFromD<D>{_mm_load_si128(reinterpret_cast<const __m128i*>((void*)aligned))};
 }
 // Generic for all vector lengths greater than or equal to 16 bytes.
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
@@ -1495,7 +1495,7 @@ HWY_API Vec128<double> Load(D /* tag */, const double* HWY_RESTRICT aligned) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API VFromD<D> LoadU(D /* tag */, const TFromD<D>* HWY_RESTRICT p) {
-  return VFromD<D>{_mm_loadu_si128(reinterpret_cast<const __m128i*>(p))};
+  return VFromD<D>{_mm_loadu_si128(reinterpret_cast<const __m128i*>((void*)p))};
 }
 // Generic for all vector lengths greater than or equal to 16 bytes.
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
@@ -1529,7 +1529,7 @@ HWY_API VFromD<D> Load(D d, const TFromD<D>* HWY_RESTRICT p) {
   __m128i v = _mm_setzero_si128();
   CopyBytes<8>(p, &v);  // not same size
 #else
-  const __m128i v = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(p));
+  const __m128i v = _mm_loadl_epi64(reinterpret_cast<const __m128i*>((void*)p));
 #endif
   return BitCast(d, VFromD<decltype(du)>{v});
 }
@@ -1542,7 +1542,7 @@ HWY_API Vec64<float> Load(D /* tag */, const float* HWY_RESTRICT p) {
   return Vec64<float>{v};
 #else
   const __m128 hi = _mm_setzero_ps();
-  return Vec64<float>{_mm_loadl_pi(hi, reinterpret_cast<const __m64*>(p))};
+  return Vec64<float>{_mm_loadl_pi(hi, reinterpret_cast<const __m64*>((void*)p))};
 #endif
 }
 
@@ -1603,7 +1603,7 @@ HWY_API VFromD<D> LoadDup128(D d, const TFromD<D>* HWY_RESTRICT p) {
 
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API void Store(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT aligned) {
-  _mm_store_si128(reinterpret_cast<__m128i*>(aligned), v.raw);
+  _mm_store_si128(reinterpret_cast<__m128i*>((void*)aligned), v.raw);
 }
 // Generic for all vector lengths greater than or equal to 16 bytes.
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
@@ -1633,7 +1633,7 @@ HWY_API void Store(Vec128<double> v, D /* tag */,
 
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_NOT_FLOAT_NOR_SPECIAL_D(D)>
 HWY_API void StoreU(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT p) {
-  _mm_storeu_si128(reinterpret_cast<__m128i*>(p), v.raw);
+  _mm_storeu_si128(reinterpret_cast<__m128i*>((void*)p), v.raw);
 }
 // Generic for all vector lengths greater than or equal to 16 bytes.
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
@@ -1667,7 +1667,7 @@ HWY_API void Store(VFromD<D> v, D d, TFromD<D>* HWY_RESTRICT p) {
   CopyBytes<8>(&v, p);  // not same size
 #else
   const RebindToUnsigned<decltype(d)> du;  // for float16_t
-  _mm_storel_epi64(reinterpret_cast<__m128i*>(p), BitCast(du, v).raw);
+  _mm_storel_epi64(reinterpret_cast<__m128i*>((void*)p), BitCast(du, v).raw);
 #endif
 }
 template <class D, HWY_IF_V_SIZE_D(D, 8), HWY_IF_F32_D(D)>
@@ -1675,7 +1675,7 @@ HWY_API void Store(Vec64<float> v, D /* tag */, float* HWY_RESTRICT p) {
 #if HWY_SAFE_PARTIAL_LOAD_STORE
   CopyBytes<8>(&v, p);  // not same size
 #else
-  _mm_storel_pi(reinterpret_cast<__m64*>(p), v.raw);
+  _mm_storel_pi(reinterpret_cast<__m64*>((void*)p), v.raw);
 #endif
 }
 template <class D, HWY_IF_V_SIZE_D(D, 8), HWY_IF_F64_D(D)>
@@ -5090,7 +5090,7 @@ HWY_API Vec128<double, N> Max(Vec128<double, N> a, Vec128<double, N> b) {
 template <class D, HWY_IF_V_SIZE_LE_D(D, 16), HWY_IF_NOT_FLOAT3264_D(D)>
 HWY_API void Stream(VFromD<D> v, D d, TFromD<D>* HWY_RESTRICT aligned) {
   const RebindToUnsigned<decltype(d)> du;  // for float16_t
-  _mm_stream_si128(reinterpret_cast<__m128i*>(aligned), BitCast(du, v).raw);
+  _mm_stream_si128(reinterpret_cast<__m128i*>((void*)aligned), BitCast(du, v).raw);
 }
 template <class D, HWY_IF_V_SIZE_LE_D(D, 16), HWY_IF_F32_D(D)>
 HWY_API void Stream(VFromD<D> v, D /* tag */, float* HWY_RESTRICT aligned) {
@@ -6990,7 +6990,7 @@ HWY_API void StoreN(VFromD<D> v, D d, TFromD<D>* HWY_RESTRICT p,
 #endif
 
   BlendedStore(vi32, MaskFromVec(i32_store_mask), di32_full,
-               reinterpret_cast<int32_t*>(p));
+               reinterpret_cast<int32_t*>((void*)p));
 
   constexpr size_t kNumOfLanesPerI32 = 4 / sizeof(TFromD<D>);
   constexpr size_t kTrailingLenMask = kNumOfLanesPerI32 - 1;
