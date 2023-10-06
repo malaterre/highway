@@ -1313,7 +1313,7 @@ HWY_API VFromD<D> Load(D /* tag */, const TFromD<D>* HWY_RESTRICT aligned) {
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
 HWY_API VFromD<D> Load(D d, const bfloat16_t* HWY_RESTRICT aligned) {
   const RebindToUnsigned<decltype(d)> du;
-  return BitCast(d, Load(du, reinterpret_cast<const uint16_t*>(aligned)));
+  return BitCast(d, Load(du, HWY_RCAST_ALIGNED(const uint16_t*, aligned)));
 }
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_F16_D(D)>
 HWY_API Vec128<float16_t> Load(D d, const float16_t* HWY_RESTRICT aligned) {
@@ -1321,7 +1321,7 @@ HWY_API Vec128<float16_t> Load(D d, const float16_t* HWY_RESTRICT aligned) {
   return Vec128<float16_t>{_mm_load_ph(aligned)};
 #else
   const RebindToUnsigned<decltype(d)> du;
-  return BitCast(d, Load(du, reinterpret_cast<const uint16_t*>(aligned)));
+  return BitCast(d, Load(du, HWY_RCAST_ALIGNED(const uint16_t*, aligned)));
 #endif  // HWY_HAVE_FLOAT16
 }
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_F32_D(D)>
@@ -1341,7 +1341,7 @@ HWY_API VFromD<D> LoadU(D /* tag */, const TFromD<D>* HWY_RESTRICT p) {
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
 HWY_API VFromD<D> LoadU(D d, const bfloat16_t* HWY_RESTRICT p) {
   const RebindToUnsigned<decltype(d)> du;
-  return BitCast(d, LoadU(du, reinterpret_cast<const uint16_t*>(p)));
+  return BitCast(d, LoadU(du, HWY_RCAST_ALIGNED(const uint16_t*, p)));
 }
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_F16_D(D)>
 HWY_API Vec128<float16_t> LoadU(D d, const float16_t* HWY_RESTRICT p) {
@@ -1449,7 +1449,7 @@ HWY_API void Store(VFromD<D> v, D /* tag */, TFromD<D>* HWY_RESTRICT aligned) {
 template <class D, HWY_IF_V_SIZE_GT_D(D, 8), HWY_IF_BF16_D(D)>
 HWY_API void Store(VFromD<D> v, D d, bfloat16_t* HWY_RESTRICT aligned) {
   const RebindToUnsigned<decltype(d)> du;
-  Store(BitCast(du, v), du, reinterpret_cast<uint16_t*>(aligned));
+  Store(BitCast(du, v), du, HWY_RCAST_ALIGNED(uint16_t*, aligned));
 }
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_F16_D(D)>
 HWY_API void Store(Vec128<float16_t> v, D d, float16_t* HWY_RESTRICT aligned) {
@@ -1458,7 +1458,7 @@ HWY_API void Store(Vec128<float16_t> v, D d, float16_t* HWY_RESTRICT aligned) {
   _mm_store_ph(aligned, v.raw);
 #else
   const RebindToUnsigned<decltype(d)> du;
-  Store(BitCast(du, v), du, reinterpret_cast<uint16_t*>(aligned));
+  Store(BitCast(du, v), du, HWY_RCAST_ALIGNED(uint16_t*, aligned));
 #endif  // HWY_HAVE_FLOAT16
 }
 template <class D, HWY_IF_V_SIZE_D(D, 16), HWY_IF_F32_D(D)>
