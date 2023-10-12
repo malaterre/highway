@@ -2669,7 +2669,7 @@ HWY_API Vec256<float16_t> Load(D d, const float16_t* HWY_RESTRICT aligned) {
   return Vec256<float16_t>{_mm256_load_ph(aligned)};
 #else
   const RebindToUnsigned<decltype(d)> du;
-  return BitCast(d, Load(du, HWY_RCAST_ALIGNED(const uint16_t*, aligned)));
+  return BitCast(d, Load(du, reinterpret_cast<const uint16_t*>(aligned)));
 #endif  // HWY_HAVE_FLOAT16
 }
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F32_D(D)>
@@ -2886,7 +2886,7 @@ HWY_API void Store(Vec256<float16_t> v, D d, float16_t* HWY_RESTRICT aligned) {
   _mm256_store_ph(aligned, v.raw);
 #else
   const RebindToUnsigned<decltype(d)> du;
-  Store(BitCast(du, v), du, HWY_RCAST_ALIGNED(uint16_t*, aligned));
+  Store(BitCast(du, v), du, reinterpret_cast<uint16_t*>(aligned));
 #endif  // HWY_HAVE_FLOAT16
 }
 template <class D, HWY_IF_V_SIZE_D(D, 32), HWY_IF_F32_D(D)>
