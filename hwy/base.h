@@ -395,7 +395,7 @@ static constexpr HWY_MAYBE_UNUSED size_t kMaxVectorSize = 16;
 // by concatenating base type and bits. We use a wrapper class instead of a
 // typedef to the native type to ensure that the same symbols, e.g. for VQSort,
 // are generated regardless of F16 support; see #1684.
-struct float16_t {
+struct alignas(2) float16_t {
 #if HWY_NEON_HAVE_FLOAT16C  // ACLE's __fp16
   using Raw = __fp16;
 #elif HWY_HAVE_C11_FLOAT16                                    // C11 _Float16
@@ -497,7 +497,7 @@ constexpr inline bool operator>=(float16_t lhs, float16_t rhs) noexcept {
 }
 #endif  // HWY_EMULATE_FLOAT16
 
-struct bfloat16_t {
+struct alignas(2) bfloat16_t {
 #if HWY_SVE_HAVE_BFLOAT16
   using Raw = __bf16;
 #elif __cplusplus >= 202100L && defined(__STDCPP_BFLOAT16_T__)  // C++23
